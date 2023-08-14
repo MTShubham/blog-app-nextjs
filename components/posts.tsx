@@ -65,8 +65,8 @@ const Posts = ({ posts }: any) => {
                                         className='rounded-md max-h-60'
                                     />
                                     <Stack mt='6' spacing='3'>
-                                        <Link href={`/post/${post.slug.current}`}><Text size='md' className='text-lg font-semibold line-clamp-2'>{post.title}</Text></Link>
-                                        <Text className='leading-5 text-gray-500 text-sm text-justify line-clamp-2'>{post.subtitle}</Text>
+                                        <Link href={`/post/${post.slug.current}`}><Text className='text-base md:text-lg font-semibold line-clamp-2'>{post.title}</Text></Link>
+                                        <Text className='leading-5 text-gray-500 text-xs md:text-sm text-justify line-clamp-2'>{post.subtitle}</Text>
                                         <Flex justifyContent='space-between' className='mt-2'>
                                             <Flex gap='3' alignItems='center' flexWrap='wrap'>
                                                 <Image
@@ -78,8 +78,8 @@ const Posts = ({ posts }: any) => {
                                                     className='rounded-full'
                                                 />
                                                 <Box>
-                                                    <Text className='text-sm font-semibold'>{post.author.name}</Text>
-                                                    <Text className='text-xs font-semibold line-clamp-1'><span className='text-gray-500'>in</span> {post.author.organization}</Text>
+                                                    <Text className='text-xs md:text-sm font-semibold'>{post.author.name}</Text>
+                                                    <Text className='text-xs md:text-xs font-semibold line-clamp-1'><span className='text-gray-500'>in</span> {post.author.organization}</Text>
                                                 </Box>
                                             </Flex>
                                             <div className='flex p-2 border-gray-500 border-1 cursor-pointer'>
