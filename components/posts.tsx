@@ -9,22 +9,29 @@ const Posts = ({ posts }: any) => {
 
     let [bookmarkedPosts, setBookmarkedPosts] = useState<string[]>([]);
     const [loggedUser, setLoggedUser] = useState('');
-
-    async function getBookmarkPostsId() {
-        const db = await initIndexedDB();
-        let user = getLocalStorage('loggedUser');
-        setLoggedUser(user);
-        let response = await getBookmarkedPosts(db, user);
-        if (response.success)
-            setBookmarkedPosts(response.postIds);
-    }
+    const [isLoading, setisLoading] = useState(true);
 
     useEffect(() => {
         let user = getLocalStorage('loggedUser');
-        setLoggedUser(user);
-        getBookmarkPostsId();
+        setLoggedUser(user)
+        setisLoading(false);
     }, [])
-    
+
+
+    useEffect(() => {
+        async function getBookmarkPostsId() {
+            const db = await initIndexedDB();
+            let user = getLocalStorage('loggedUser');
+            setLoggedUser(user);
+            let response = await getBookmarkedPosts(db, user);
+            if (response.success)
+                setBookmarkedPosts(response.postIds);
+        }
+        if (loggedUser) {
+            getBookmarkPostsId();
+        }
+    }, [loggedUser])
+
     const bookmark = async (postId) => {
         const db = await initIndexedDB();
         let user = getLocalStorage('loggedUser');
@@ -46,6 +53,9 @@ const Posts = ({ posts }: any) => {
             setBookmarkedPosts(response.postIds);
         }
     }
+
+    if (isLoading)
+    return <p>Loading...</p>
 
     return (
         <>
