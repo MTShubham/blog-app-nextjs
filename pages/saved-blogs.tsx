@@ -14,19 +14,20 @@ const SavedBlogs = ({ post }) => {
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
     let [posts, setPosts] = useState([]);
     const [loggedUser, setLoggedUser] = useState('');
+    const [isLoading, setisLoading] = useState(true);
 
-    // if (isLoading)
-    //     return <p>Loading...</p>
-
+ 
     // if (post) {
     //     setIsLoading(false);
     // }
 
+  
+
     useEffect(() => {
         let user = getLocalStorage('loggedUser');
         setLoggedUser(user)
-    }, [loggedUser]);
-
+        setisLoading(false);
+    }, [])
     useEffect(() => {
         async function getBookmarkPostsId() {
             const db = await initIndexedDB();
@@ -36,8 +37,10 @@ const SavedBlogs = ({ post }) => {
                 setBookmarkedPostIds(response.postIds);
             }
         }
-        getBookmarkPostsId();
-    }, [])
+        if (loggedUser) {
+            getBookmarkPostsId();
+        }
+    },[loggedUser])
 
     useEffect(() => {
         async function getPosts() {
@@ -56,8 +59,10 @@ const SavedBlogs = ({ post }) => {
             });
             setPosts(filPosts);
         }
-        getPosts();
-    }, [bookmarkedPostIds])
+        if (bookmarkedPostIds) {
+            getPosts();
+        }
+    }, [ bookmarkedPostIds])
 
     const removeBookmark = async (postId) => {
         const db = await initIndexedDB();
@@ -67,6 +72,9 @@ const SavedBlogs = ({ post }) => {
             setBookmarkedPostIds(response.postIds)
         }
     }
+
+    if (isLoading)
+    return <p>Loading...</p>
 
     return (
         <>
