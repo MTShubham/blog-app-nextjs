@@ -108,9 +108,9 @@ const SavedBlogs = ({ post }) => {
                                     )
                                 })
                             )}
-                            {posts.length === 0 && (
+                            {/* {posts.length === 0 && (
                                 <h1 className='text-center text-2xl font-semibold my-20'>No saved blogs</h1>
-                            )}
+                            )} */}
                         </>
                     ) : (
                         <h1 className='text-center text-2xl font-semibold my-20'>Please login to see this page</h1>
