@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB';
 import { getLocalStorage } from '@/utils/storage';
 
-const SavedBlogs = ({ post }) => {
+const SavedBlogs = () => {
     const router = useRouter();
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
     let [posts, setPosts] = useState([]);
@@ -108,9 +108,9 @@ const SavedBlogs = ({ post }) => {
                                     )
                                 })
                             )}
-                            {/* {posts.length === 0 && (
+                            {posts.length === 0 && (
                                 <h1 className='text-center text-2xl font-semibold my-20'>No saved blogs</h1>
-                            )} */}
+                            )}
                         </>
                     ) : (
                         <h1 className='text-center text-2xl font-semibold my-20'>Please login to see this page</h1>
@@ -126,21 +126,3 @@ const SavedBlogs = ({ post }) => {
 }
 
 export default SavedBlogs
-
-export async function getStaticProps(context: any) {
-    const { params } = context
-    const posts = await sanityClient.fetch(groq`
-        *[_type=="post" && slug.current=='manager-to-software-developer-lessons-learned'] {
-        ...,
-        "posterImage": {"alt": posterImage.alt, "url": posterImage.asset->.url},
-        "author": author->{
-          ...,
-          "profileImage": {"alt": profileImage.alt, "url":profileImage.asset->.url}
-        },
-        "categories": categories[]->
-      }
-    `);
-    return {
-        props: { post: posts[0] }
-    }
-}   

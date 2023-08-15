@@ -16,7 +16,7 @@ const Login = () => {
         const response = await loginUser(db, user);
         if (response.success) {
             setLocalStorage('loggedUser', user.username);
-            router.push('/');
+            router.back();
         }
         else
             setError(response.msg);

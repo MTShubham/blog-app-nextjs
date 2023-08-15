@@ -4,19 +4,29 @@ import Link from 'next/link'
 import { Box, Card, CardBody, Flex, Stack, Text } from '@chakra-ui/react'
 import { bookmarkPost, getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB'
 import { getLocalStorage } from '@/utils/storage'
+import { useRouter } from 'next/router'
+import Modal from './Modal'
 
 const Posts = ({ posts }: any) => {
-
     let [bookmarkedPosts, setBookmarkedPosts] = useState<string[]>([]);
     const [loggedUser, setLoggedUser] = useState('');
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const router = useRouter();
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     useEffect(() => {
         let user = getLocalStorage('loggedUser');
         setLoggedUser(user)
-        setisLoading(false);
+        setIsLoading(false);
     }, [])
-
 
     useEffect(() => {
         async function getBookmarkPostsId() {
@@ -55,11 +65,15 @@ const Posts = ({ posts }: any) => {
     }
 
     if (isLoading)
-    return <p>Loading...</p>
+        return <p>Loading...</p>
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-6 bg-slate-50 place-items-center">
+            {isModalOpen &&
+                <Modal onClose={closeModal}>Please login to bookmark or remove bookmark the blog<br /><Link href="/login" className='text-blue-600 my-5'>Login</Link></Modal>
+            }
+
+            <div className="grid grid-cols-1 md:grid-cols-6 place-items-center">
                 <div></div>
                 <div className='grid grid-cols-1 xl:grid-cols-2 md:col-span-4 gap-x-5 gap-y-8 my-5 p-5'>
                     {posts.map((post: any) => {
@@ -75,7 +89,7 @@ const Posts = ({ posts }: any) => {
                                         className='rounded-md max-h-60'
                                     />
                                     <Stack mt='6' spacing='3'>
-                                        <Link href={`/post/${post.slug.current}`}><Text className='text-base md:text-lg font-semibold line-clamp-2'>{post.title}</Text></Link>
+                                        <Link href={`/post/${post.slug}`}><Text className='text-base md:text-lg font-semibold line-clamp-2'>{post.title}</Text></Link>
                                         <Text className='leading-5 text-gray-500 text-xs md:text-sm text-justify line-clamp-2'>{post.subtitle}</Text>
                                         <Flex justifyContent='space-between' className='mt-2'>
                                             <Flex gap='3' alignItems='center' flexWrap='wrap'>
@@ -94,10 +108,10 @@ const Posts = ({ posts }: any) => {
                                             </Flex>
                                             <div className='flex p-2 border-gray-500 border-1 cursor-pointer'>
                                                 {!bookmarkedPosts?.includes(post._id) ?
-                                                    (<svg onClick={() => loggedUser && bookmark(post._id)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                    (<svg onClick={() => loggedUser ? bookmark(post._id) : openModal()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                                                     </svg>) :
-                                                    (<svg onClick={() => loggedUser && removeBookmark(post._id)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                                    (<svg onClick={() => loggedUser ? removeBookmark(post._id) : openModal()} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                         <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
                                                     </svg>)
                                                 }
