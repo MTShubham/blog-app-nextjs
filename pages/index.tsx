@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import Posts from "@/components/posts"
-import sanityClient from "@/sanity/sanity.client";
-import { groq } from "next-sanity";
+import { getAllPosts } from "@/utils/sanityData";
 
 export default function Home({ posts }: any) {
   return (
@@ -16,18 +15,7 @@ export default function Home({ posts }: any) {
 
 
 export async function getStaticProps() {
-  const posts = await sanityClient.fetch(groq`
-    *[_type=="post"] | order(_createdAt desc) {
-        ...,
-        "slug": slug.current,
-        "posterImage": {"alt": posterImage.alt, "url": posterImage.asset->.url},
-        "author": author->{
-          ...,
-          "profileImage": {"alt": profileImage.alt, "url":profileImage.asset->.url}
-        },
-        "categories": categories[]->
-      }
-  `);
+  const posts = await getAllPosts();
   return {
     props: { posts }
   }

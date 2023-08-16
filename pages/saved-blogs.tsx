@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import sanityClient from '@/sanity/sanity.client';
 import { groq } from 'next-sanity';
@@ -8,17 +8,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB';
 import { getLocalStorage } from '@/utils/storage';
+import { UserContext } from './_app';
 
 const SavedBlogs = () => {
     const router = useRouter();
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
     let [posts, setPosts] = useState([]);
-    const [loggedUser, setLoggedUser] = useState('');
     const [isLoading, setisLoading] = useState(true);
+    const loggedUserContext = useContext(UserContext);
 
     useEffect(() => {
         let user = getLocalStorage('loggedUser');
-        setLoggedUser(user)
+        loggedUserContext?.setLoggedUser(user)
         setisLoading(false);
     }, [])
 
@@ -31,10 +32,10 @@ const SavedBlogs = () => {
                 setBookmarkedPostIds(response.postIds);
             }
         }
-        if (loggedUser) {
+        if (loggedUserContext?.loggedUser) {
             getBookmarkPostsId();
         }
-    }, [loggedUser])
+    }, [loggedUserContext?.loggedUser])
 
     useEffect(() => {
         async function getPosts() {
@@ -78,7 +79,7 @@ const SavedBlogs = () => {
 
                 <div className='col-span-2'>
 
-                    {loggedUser ? (
+                    {loggedUserContext?.loggedUser ? (
                         <>
                             {posts.length > 0 && (
                                 posts.map((post: any) => {

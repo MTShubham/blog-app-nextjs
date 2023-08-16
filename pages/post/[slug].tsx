@@ -41,7 +41,6 @@ const Post = ({ post }: any) => {
                             height={getImageDimensions(post.posterImage.url).height}
                             quality={100}
                             alt={post.posterImage.alt}
-                            // className='w-9/12 max-h-80'
                         />
                     </div>
 

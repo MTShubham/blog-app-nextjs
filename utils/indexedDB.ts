@@ -74,13 +74,14 @@ export async function bookmarkPost(db, username: string, postId: string) {
     const transaction = await db.transaction('bookmarks', 'readwrite');
     let bookmarks = transaction.objectStore('bookmarks');
     let userBookmarks = await bookmarks.get(username);
-    let postIds = userBookmarks;
+    let postIds;
     if (userBookmarks) {
         ({ postIds } = userBookmarks);
     }
     else {
         postIds = [];
     }
+    console.log(postIds.length, postIds);
     postIds.push(postId);
     const request = await bookmarks.put({ username, postIds: postIds });
     if (request) {

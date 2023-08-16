@@ -1,0 +1,1 @@
+export const MAX_BOOKMARK_ALLOWED = 5
