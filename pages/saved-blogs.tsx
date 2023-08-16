@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
-import sanityClient from '@/sanity/sanity.client';
-import { groq } from 'next-sanity';
 import Header from '@/components/Header';
 import { Card, CardBody, Text } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -9,24 +7,26 @@ import Link from 'next/link';
 import { getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB';
 import { getLocalStorage } from '@/utils/storage';
 import { UserContext } from './_app';
+import { getPostsByBookmarkedPostIds } from '@/utils/sanityData';
+import { IDBPDatabase } from 'idb';
 
 const SavedBlogs = () => {
     const router = useRouter();
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
     let [posts, setPosts] = useState([]);
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoading, setisLoading] = useState<Boolean>(true);
     const loggedUserContext = useContext(UserContext);
 
     useEffect(() => {
-        let user = getLocalStorage('loggedUser');
+        let user: string = getLocalStorage('loggedUser');
         loggedUserContext?.setLoggedUser(user)
         setisLoading(false);
     }, [])
 
     useEffect(() => {
         async function getBookmarkPostsId() {
-            const db = await initIndexedDB();
-            let user = getLocalStorage('loggedUser');
+            const db: IDBPDatabase = await initIndexedDB();
+            let user: string = getLocalStorage('loggedUser');
             let response = await getBookmarkedPosts(db, user);
             if (response.success) {
                 setBookmarkedPostIds(response.postIds);
@@ -39,29 +39,17 @@ const SavedBlogs = () => {
 
     useEffect(() => {
         async function getPosts() {
-            const filPosts = await sanityClient.fetch(groq`
-                *[_type=="post" && _id in $bookmarkedPostIds] {
-                ...,
-                "posterImage": {"alt": posterImage.alt, "url": posterImage.asset->.url},
-                "author": author->{
-                ...,
-                "profileImage": {"alt": profileImage.alt, "url":profileImage.asset->.url}
-                },
-                "categories": categories[]->
-            }
-            `, {
-                bookmarkedPostIds
-            });
-            setPosts(filPosts);
+            const filteredPosts = await getPostsByBookmarkedPostIds(bookmarkedPostIds);
+            setPosts(filteredPosts);
         }
         if (bookmarkedPostIds) {
             getPosts();
         }
     }, [bookmarkedPostIds])
 
-    const removeBookmark = async (postId) => {
+    const removeBookmark = async (postId: string) => {
         const db = await initIndexedDB();
-        let user = getLocalStorage('loggedUser');
+        let user: string = getLocalStorage('loggedUser');
         let response = await removePostBookmark(db, user, postId);
         if (response.success) {
             setBookmarkedPostIds(response.postIds)

@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Tealfeed</title>
         <meta name='description' content='A knowledge sharing blog platform' />
       </Head>
-      <CacheProvider>
+      {/* <CacheProvider> */}
         <SessionProvider session={pageProps.session}>
           <ChakraProvider>
             <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
@@ -29,7 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </UserContext.Provider>
           </ChakraProvider>
         </SessionProvider>
-      </CacheProvider>
+      {/* </CacheProvider> */}
     </>
   )
 }

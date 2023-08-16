@@ -11,7 +11,8 @@ const config = defineConfig({
     apiVersion: '2021-03-25',
     basePath: '/studio',
     plugins: [deskTool(), visionTool()],
-    schema: { types: schemas }
+    schema: { types: schemas },
+    useCdn: false
 })
 
 export default config;

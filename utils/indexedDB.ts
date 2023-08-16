@@ -1,4 +1,5 @@
 import { openDB } from 'idb';
+import { MAX_BOOKMARK_ALLOWED } from './globalConstants';
 
 type User = {
     username: string,
@@ -24,10 +25,10 @@ export async function saveUser(db, user: User) {
     let users = transaction.objectStore('users');
     const request = await users.add(user);
     if (request) {
-        return { success: true, msg: 'Created an user account' };
+        return { success: true, status: 201, msg: 'Created an user account' };
     }
     else {
-        return { success: false, msg: 'Error in creating user' };
+        return { success: false, status: 500, msg: 'Error in creating user' };
     }
 }
 
@@ -35,11 +36,11 @@ export async function loginUser(db, user: User) {
     const transaction = await db.transaction('users', 'readonly');
     let users = transaction.objectStore('users');
     const foundUser = await users.get(user.username);
-    if (foundUser.password === user.password && foundUser !== undefined) {
-        return { success: true, msg: 'Successful login' };
+    if (foundUser?.password === user.password && foundUser !== undefined) {
+        return { success: true, status: 200, msg: 'Successful login' };
     }
     else {
-        return { success: false, msg: 'Invalid credentials' };
+        return { success: false, status: 500, msg: 'Invalid credentials' };
     }
 }
 
@@ -50,9 +51,9 @@ export async function getBookmarkedPosts(db, username: string) {
     let postIds = userBookmarks;
     if (userBookmarks) {
         ({ postIds } = userBookmarks);
-        return { success: true, postIds };
+        return { success: true, status: 200, postIds };
     }
-    return { success: false, msg: 'Unable to fetch bookmarked posts' };
+    return { success: false, status: 500, msg: 'Unable to fetch bookmarked posts' };
 }
 
 export async function removePostBookmark(db, username: string, postId: string) {
@@ -63,10 +64,10 @@ export async function removePostBookmark(db, username: string, postId: string) {
     let postIdsAfterRemoval = postIds.filter((id: string) => postId !== id)
     const request = await bookmarks.put({ username, postIds: postIdsAfterRemoval });
     if (request) {
-        return { success: true, postIds: postIdsAfterRemoval };
+        return { success: true, status: 201, postIds: postIdsAfterRemoval };
     }
     else {
-        return { success: false, msg: 'Unable to remove bookmark' };
+        return { success: false, status: 500, msg: 'Unable to remove bookmark' };
     }
 }
 
@@ -81,13 +82,15 @@ export async function bookmarkPost(db, username: string, postId: string) {
     else {
         postIds = [];
     }
-    console.log(postIds.length, postIds);
+    if (postIds.length === MAX_BOOKMARK_ALLOWED) {
+        return { success: false, status: 400, msg: 'Only 5 bookmarks are allowed per user and you have achieved that. So you cannot bookmark more blog posts' };
+    }
     postIds.push(postId);
     const request = await bookmarks.put({ username, postIds: postIds });
     if (request) {
-        return { success: true, postIds };
+        return { success: true, status: 200, postIds };
     }
     else {
-        return { success: false, msg: 'Unable to bookmark' };
+        return { success: false, status: 500, msg: 'Unable to bookmark due to server error' };
     }
 }   

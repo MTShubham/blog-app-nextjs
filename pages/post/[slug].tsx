@@ -6,6 +6,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { PortableText } from "@portabletext/react";
 import RichTextComponents from "@/components/RichTextComponents";
 import { getImageDimensions } from '@sanity/asset-utils';
+import { REVALIDATE_TIME } from "@/utils/globalConstants";
 
 const Post = ({ post }: any) => {
     return (
@@ -90,8 +91,10 @@ export async function getStaticProps(context: any) {
         },
         "categories": categories[]->
       }
-    `);
+    `, { cache: 'no-store' });
+    console.log(posts[0].posterImage)
     return {
-        props: { post: posts[0] }
+        props: { post: posts[0] },
+        revalidate: 5
     }
 }   
