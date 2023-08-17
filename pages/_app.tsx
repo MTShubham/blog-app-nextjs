@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider } from '@chakra-ui/react'
 import { SessionProvider } from 'next-auth/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export type UserContextType = {
   loggedUser: string,
@@ -22,13 +22,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name='description' content='A knowledge sharing blog platform' />
       </Head>
       {/* <CacheProvider> */}
-        <SessionProvider session={pageProps.session}>
-          <ChakraProvider>
-            <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
-              <Component {...pageProps} />
-            </UserContext.Provider>
-          </ChakraProvider>
-        </SessionProvider>
+      <SessionProvider session={pageProps.session}>
+        <ChakraProvider>
+          <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
+            <Component {...pageProps} />
+          </UserContext.Provider>
+        </ChakraProvider>
+      </SessionProvider>
       {/* </CacheProvider> */}
     </>
   )

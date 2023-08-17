@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import { Card, CardBody, Text } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -9,9 +8,9 @@ import { getLocalStorage } from '@/utils/storage';
 import { UserContext } from './_app';
 import { getPostsByBookmarkedPostIds } from '@/utils/sanityData';
 import { IDBPDatabase } from 'idb';
+import { Post } from '@/utils/types';
 
 const SavedBlogs = () => {
-    const router = useRouter();
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
     let [posts, setPosts] = useState([]);
     const [isLoading, setisLoading] = useState<Boolean>(true);
@@ -70,7 +69,7 @@ const SavedBlogs = () => {
                     {loggedUserContext?.loggedUser ? (
                         <>
                             {posts.length > 0 && (
-                                posts.map((post: any) => {
+                                posts.map((post: Post) => {
                                     return (
                                         <Card
                                             key={post._id}
@@ -87,7 +86,7 @@ const SavedBlogs = () => {
                                                 />
                                                 <div>
                                                     <CardBody>
-                                                        <Link href={`/post/${post.slug.current}`}><Text size='md' className='text-sm md:text-lg font-semibold line-clamp-3 md:line-clamp-1'>{post.title}</Text></Link>
+                                                        <Link href={`/post/${post.slug}`}><Text size='md' className='text-sm md:text-lg font-semibold line-clamp-3 md:line-clamp-1'>{post.title}</Text></Link>
                                                         <Text className='leading-5 text-gray-500 text-xs md:text-sm text-justify line-clamp-4 md:line-clamp-1 my-3'>{post.subtitle}</Text>
                                                     </CardBody>
                                                 </div>

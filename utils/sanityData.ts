@@ -21,6 +21,7 @@ export const getPostsByBookmarkedPostIds = async (bookmarkedPostIds: string[]) =
   const filteredPosts = await sanityClient.fetch(groq`
         *[_type=="post" && _id in $bookmarkedPostIds] {
         ...,
+        "slug": slug.current,
         "posterImage": {"alt": posterImage.alt, "url": posterImage.asset->.url},
         "author": author->{
         ...,

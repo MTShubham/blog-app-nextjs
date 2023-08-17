@@ -7,6 +7,7 @@ import { PortableText } from "@portabletext/react";
 import RichTextComponents from "@/components/RichTextComponents";
 import { getImageDimensions } from '@sanity/asset-utils';
 import { REVALIDATE_TIME } from "@/utils/globalConstants";
+import { Post } from "@/utils/types";
 
 const Post = ({ post }: any) => {
     return (
@@ -66,7 +67,7 @@ export async function getStaticPaths() {
             "slug": slug.current
         }
   `);
-    const paths = postsSlug.map((post: any) => {
+    const paths = postsSlug.map((post) => {
         return {
             params: {
                 slug: post.slug
@@ -92,7 +93,6 @@ export async function getStaticProps(context: any) {
         "categories": categories[]->
       }
     `, { cache: 'no-store' });
-    console.log(posts[0].posterImage)
     return {
         props: { post: posts[0] },
         revalidate: 5

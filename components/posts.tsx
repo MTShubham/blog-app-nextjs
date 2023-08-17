@@ -8,45 +8,43 @@ import { useRouter } from 'next/router'
 import Modal from './Modal'
 import { UserContext } from '@/pages/_app'
 import { IDBPDatabase } from 'idb'
+import { Post } from '@/utils/types'
 
 const Posts = ({ posts }: any) => {
-    console.log("posts in component",posts);
-    // console.log(1);
     let [bookmarkedPosts, setBookmarkedPosts] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [modalData, setModalData] = useState<JSX.Element>(<></>);
-    const loggedUserContext = useContext(UserContext);
+    const userContext = useContext(UserContext);
     const router = useRouter();
 
     useEffect(() => {
-        // console.log(2)
         const user: string = getLocalStorage('loggedUser');
-        loggedUserContext?.setLoggedUser(user)
+        userContext?.setLoggedUser(user)
         setIsLoading(false);
     }, [])
 
     useEffect(() => {
-        console.log(loggedUserContext?.loggedUser);
         async function getBookmarkPostsId() {
             const db: IDBPDatabase = await initIndexedDB();
             const user: string = getLocalStorage('loggedUser');
-            loggedUserContext?.setLoggedUser(user);
-            console.log(user);
+            userContext?.setLoggedUser(user);
             const response = await getBookmarkedPosts(db, user);
             if (response.success)
                 setBookmarkedPosts(response.postIds);
-
         }
-        if (loggedUserContext?.loggedUser) {
+        if (userContext?.loggedUser) {
             getBookmarkPostsId();
         }
-    }, [loggedUserContext?.loggedUser])
+        else {
+            setBookmarkedPosts([])
+        }
+    }, [userContext?.loggedUser])
 
     const bookmark = async (postId: string) => {
         const db: IDBPDatabase = await initIndexedDB();
         const user: string = getLocalStorage('loggedUser');
-        loggedUserContext?.setLoggedUser(user)
+        userContext?.setLoggedUser(user)
         if (user) {
             const response = await bookmarkPost(db, user, postId);
             if (response.success) {
@@ -62,7 +60,7 @@ const Posts = ({ posts }: any) => {
     const removeBookmark = async (postId: string) => {
         const db: IDBPDatabase = await initIndexedDB();
         let user: string = getLocalStorage('loggedUser');
-        loggedUserContext?.setLoggedUser(user);
+        userContext?.setLoggedUser(user);
         const response = await removePostBookmark(db, user, postId);
         if (response.success) {
             setBookmarkedPosts(response.postIds);
@@ -90,7 +88,7 @@ const Posts = ({ posts }: any) => {
             <div className="grid grid-cols-1 md:grid-cols-6 place-items-center">
                 <div></div>
                 <div className='grid grid-cols-1 xl:grid-cols-2 md:col-span-4 gap-x-5 gap-y-8 my-5 p-5'>
-                    {posts.map((post: any) => {
+                    {posts.map((post: Post) => {
                         return (
                             <Card maxW='md' key={post._id}>
                                 <CardBody>
@@ -99,7 +97,7 @@ const Posts = ({ posts }: any) => {
                                         width={420}
                                         height={100}
                                         quality={100}
-                                        alt={posts[0].author.profileImage.alt}
+                                        alt={post.posterImage.alt}
                                         className='rounded-md max-h-60'
                                     />
                                     <Stack mt='6' spacing='3'>
@@ -122,11 +120,11 @@ const Posts = ({ posts }: any) => {
                                             </Flex>
                                             <div className='flex p-2 border-gray-500 border-1 cursor-pointer'>
                                                 {!bookmarkedPosts?.includes(post._id) ?
-                                                    (<svg onClick={() => loggedUserContext?.loggedUser ? bookmark(post._id) : openModal(<p>Please login to bookmark the blog<br /><Link href="/login" className='text-blue-600 my-5'>Login</Link></p>)}
+                                                    (<svg onClick={() => userContext?.loggedUser ? bookmark(post._id) : openModal(<p>Please login to bookmark the blog<br /><Link href="/login" className='text-blue-600 my-5'>Login</Link></p>)}
                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                                                     </svg>) :
-                                                    (<svg onClick={() => loggedUserContext?.loggedUser ? removeBookmark(post._id) : openModal(<p>Please login to remove bookmark<br /><Link href="/login" className='text-blue-600 my-5'>Login</Link></p>)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                                    (<svg onClick={() => userContext?.loggedUser ? removeBookmark(post._id) : openModal(<p>Please login to remove bookmark<br /><Link href="/login" className='text-blue-600 my-5'>Login</Link></p>)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                         <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
                                                     </svg>)
                                                 }

@@ -13,5 +13,4 @@ export function getLocalStorage(key: string) {
 
 export function removeLocalStorage(key: string) {
     localStorage.removeItem(key);
-    window.dispatchEvent(new Event("storage"));
 }
