@@ -8,7 +8,7 @@ import { getLocalStorage } from '@/utils/storage';
 import { UserContext } from './_app';
 import { getPostsByBookmarkedPostIds } from '@/utils/sanityData';
 import { IDBPDatabase } from 'idb';
-import { Post } from '@/utils/types';
+import { PostType } from '@/utils/types';
 
 const SavedBlogs = () => {
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
@@ -69,7 +69,7 @@ const SavedBlogs = () => {
                     {loggedUserContext?.loggedUser ? (
                         <>
                             {posts.length > 0 && (
-                                posts.map((post: Post) => {
+                                posts.map((post: PostType) => {
                                     return (
                                         <Card
                                             key={post._id}

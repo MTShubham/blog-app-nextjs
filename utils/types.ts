@@ -1,4 +1,4 @@
-export type Category = {
+export type CategoryType = {
     title: string, 
     description: string
 }
@@ -8,21 +8,21 @@ export type ImageType = {
     alt: string
 }
 
-export type Author = {
+export type AuthorType = {
     profileImage: ImageType,
     name: string,
     organization: string
 }
 
-export type Post = {
+export type PostType = {
     slug: string,
     title: string,
     subtitle: string,
     posterImage: ImageType,
-    categories: Category[],
+    categories: CategoryType[],
     body: [],
     _id: string,
-    author: Author,
+    author: AuthorType,
     _createdAt: string,
     _updatedAt: string,
 }

@@ -7,7 +7,7 @@ import { PortableText } from "@portabletext/react";
 import RichTextComponents from "@/components/RichTextComponents";
 import { getImageDimensions } from '@sanity/asset-utils';
 import { REVALIDATE_TIME } from "@/utils/globalConstants";
-import { Post } from "@/utils/types";
+// import { PostType } from "@/utils/types";
 
 const Post = ({ post }: any) => {
     return (

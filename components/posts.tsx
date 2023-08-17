@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import Modal from './Modal'
 import { UserContext } from '@/pages/_app'
 import { IDBPDatabase } from 'idb'
-import { Post } from '@/utils/types'
+import { PostType } from '@/utils/types'
 
 const Posts = ({ posts }: any) => {
     let [bookmarkedPosts, setBookmarkedPosts] = useState<string[]>([]);
@@ -88,7 +88,7 @@ const Posts = ({ posts }: any) => {
             <div className="grid grid-cols-1 md:grid-cols-6 place-items-center">
                 <div></div>
                 <div className='grid grid-cols-1 xl:grid-cols-2 md:col-span-4 gap-x-5 gap-y-8 my-5 p-5'>
-                    {posts.map((post: Post) => {
+                    {posts.map((post: PostType) => {
                         return (
                             <Card maxW='md' key={post._id}>
                                 <CardBody>
