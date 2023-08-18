@@ -34,3 +34,18 @@ export const getPostsByBookmarkedPostIds = async (bookmarkedPostIds: string[]) =
   });
   return filteredPosts;
 }
+
+export const getPostBySlug = async (slug: string) => {
+  const posts = await sanityClient.fetch(groq`
+  *[_type=="post" && slug.current==$slug] {
+  ...,
+  "posterImage": {"alt": posterImage.alt, "url": posterImage.asset->.url},
+  "author": author->{
+    ...,
+    "profileImage": {"alt": profileImage.alt, "url":profileImage.asset->.url}
+  },
+  "categories": categories[]->
+}
+`, {slug}, { cache: 'no-store' });
+return posts[0];
+}

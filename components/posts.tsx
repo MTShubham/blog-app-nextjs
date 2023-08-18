@@ -2,12 +2,10 @@ import { useContext, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Box, Card, CardBody, Flex, Stack, Text } from '@chakra-ui/react'
-import { bookmarkPost, getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB'
+import { bookmarkPost, getBookmarkedPosts, removePostBookmark } from '@/utils/indexedDB'
 import { getLocalStorage } from '@/utils/storage'
-import { useRouter } from 'next/router'
 import Modal from './Modal'
 import { UserContext } from '@/pages/_app'
-import { IDBPDatabase } from 'idb'
 import { PostType } from '@/utils/types'
 
 const Posts = ({ posts }: any) => {
@@ -16,7 +14,6 @@ const Posts = ({ posts }: any) => {
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [modalData, setModalData] = useState<JSX.Element>(<></>);
     const userContext = useContext(UserContext);
-    const router = useRouter();
 
     useEffect(() => {
         const user: string = getLocalStorage('loggedUser');
@@ -26,10 +23,9 @@ const Posts = ({ posts }: any) => {
 
     useEffect(() => {
         async function getBookmarkPostsId() {
-            const db: IDBPDatabase = await initIndexedDB();
             const user: string = getLocalStorage('loggedUser');
             userContext?.setLoggedUser(user);
-            const response = await getBookmarkedPosts(db, user);
+            const response = await getBookmarkedPosts(user);
             if (response.success)
                 setBookmarkedPosts(response.postIds);
         }
@@ -42,11 +38,10 @@ const Posts = ({ posts }: any) => {
     }, [userContext?.loggedUser])
 
     const bookmark = async (postId: string) => {
-        const db: IDBPDatabase = await initIndexedDB();
         const user: string = getLocalStorage('loggedUser');
         userContext?.setLoggedUser(user)
         if (user) {
-            const response = await bookmarkPost(db, user, postId);
+            const response = await bookmarkPost(user, postId);
             if (response.success) {
                 setBookmarkedPosts(response.postIds);
             }
@@ -58,10 +53,9 @@ const Posts = ({ posts }: any) => {
     }
 
     const removeBookmark = async (postId: string) => {
-        const db: IDBPDatabase = await initIndexedDB();
         let user: string = getLocalStorage('loggedUser');
         userContext?.setLoggedUser(user);
-        const response = await removePostBookmark(db, user, postId);
+        const response = await removePostBookmark(user, postId);
         if (response.success) {
             setBookmarkedPosts(response.postIds);
         }
@@ -87,7 +81,7 @@ const Posts = ({ posts }: any) => {
 
             <div className="grid grid-cols-1 md:grid-cols-6 place-items-center">
                 <div></div>
-                <div className='grid grid-cols-1 xl:grid-cols-2 md:col-span-4 gap-x-5 gap-y-8 my-5 p-5'>
+                <div className='grid grid-cols-1 xl:grid-cols-2 md:col-span-4 gap-x-5 gap-y-8 my-5 p-5' id='posts'>
                     {posts.map((post: PostType) => {
                         return (
                             <Card maxW='md' key={post._id}>

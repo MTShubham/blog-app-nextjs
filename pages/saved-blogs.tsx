@@ -3,30 +3,27 @@ import Header from '@/components/Header';
 import { Card, CardBody, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBookmarkedPosts, initIndexedDB, removePostBookmark } from '@/utils/indexedDB';
+import { getBookmarkedPosts, removePostBookmark } from '@/utils/indexedDB';
 import { getLocalStorage } from '@/utils/storage';
 import { UserContext } from './_app';
 import { getPostsByBookmarkedPostIds } from '@/utils/sanityData';
-import { IDBPDatabase } from 'idb';
 import { PostType } from '@/utils/types';
 
 const SavedBlogs = () => {
     let [bookmarkedPostIds, setBookmarkedPostIds] = useState<string[]>([]);
-    let [posts, setPosts] = useState([]);
+    let [posts, setPosts] = useState<any>(null);
     const [isLoading, setisLoading] = useState<Boolean>(true);
     const loggedUserContext = useContext(UserContext);
 
     useEffect(() => {
         let user: string = getLocalStorage('loggedUser');
         loggedUserContext?.setLoggedUser(user)
-        setisLoading(false);
     }, [])
 
     useEffect(() => {
         async function getBookmarkPostsId() {
-            const db: IDBPDatabase = await initIndexedDB();
             let user: string = getLocalStorage('loggedUser');
-            let response = await getBookmarkedPosts(db, user);
+            let response = await getBookmarkedPosts(user);
             if (response.success) {
                 setBookmarkedPostIds(response.postIds);
             }
@@ -40,22 +37,22 @@ const SavedBlogs = () => {
         async function getPosts() {
             const filteredPosts = await getPostsByBookmarkedPostIds(bookmarkedPostIds);
             setPosts(filteredPosts);
+            setisLoading(false);
         }
-        if (bookmarkedPostIds) {
+        if (bookmarkedPostIds && loggedUserContext?.loggedUser) {
             getPosts();
         }
     }, [bookmarkedPostIds])
 
     const removeBookmark = async (postId: string) => {
-        const db = await initIndexedDB();
         let user: string = getLocalStorage('loggedUser');
-        let response = await removePostBookmark(db, user, postId);
+        let response = await removePostBookmark(user, postId);
         if (response.success) {
             setBookmarkedPostIds(response.postIds)
         }
     }
 
-    if (isLoading)
+    if (isLoading || posts == null)
         return <p>Loading...</p>
 
     return (
@@ -68,7 +65,7 @@ const SavedBlogs = () => {
 
                     {loggedUserContext?.loggedUser ? (
                         <>
-                            {posts.length > 0 && (
+                            {posts && posts.length > 0 && (
                                 posts.map((post: PostType) => {
                                     return (
                                         <Card

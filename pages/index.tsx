@@ -17,9 +17,8 @@ export default function Home({ posts }: any) {
 
 export async function getStaticProps() {
   const posts = await getAllPosts();
-  // console.log("In GetStaticProps", posts[0]);
   return {
     props: { posts },
-    revalidate: 5
+    revalidate: REVALIDATE_TIME
   }
 }   

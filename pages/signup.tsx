@@ -1,6 +1,6 @@
 import { FormEventHandler, useState } from 'react';
 import Link from 'next/link';
-import { initIndexedDB, saveUser } from '@/utils/indexedDB';
+import { saveUser } from '@/utils/indexedDB';
 import { useRouter } from 'next/router';
 import { setLocalStorage } from '@/utils/storage';
 
@@ -11,8 +11,7 @@ const Signup = () => {
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        const db = await initIndexedDB();
-        const response = await saveUser(db, user);
+        const response = await saveUser(user);
         if(response.success) {
             setLocalStorage('loggedUser', user.username);
             router.push('/');
