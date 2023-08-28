@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Index page Whether all the poster images of the post loaded or not 1`] = `
+{
+  "alt": "Continuous learning",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 2`] = `
+{
+  "alt": "Self believe",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 3`] = `
+{
+  "alt": "Audio to software",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 4`] = `
+{
+  "alt": "Stress and happiness",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 5`] = `
+{
+  "alt": "AI future",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 6`] = `
+{
+  "alt": "Strategies for success",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 7`] = `
+{
+  "alt": "Ink",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 8`] = `
+{
+  "alt": "Healthcare",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 9`] = `
+{
+  "alt": "Website Terms and Conditions",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 10`] = `
+{
+  "alt": "ChatGPT Developers",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 11`] = `
+{
+  "alt": "Technical",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 12`] = `
+{
+  "alt": "Resilience",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 13`] = `
+{
+  "alt": "Software Developer",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 14`] = `
+{
+  "alt": "Learning from mistakes",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 15`] = `
+{
+  "alt": "Relaxing Life",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 16`] = `
+{
+  "alt": "Life Wheel",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 17`] = `
+{
+  "alt": "rise of PhonePe",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 18`] = `
+{
+  "alt": "Data Science",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 19`] = `
+{
+  "alt": "Tech and ML",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 20`] = `
+{
+  "alt": "Postr Image",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 21`] = `
+{
+  "alt": "UX images",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 22`] = `
+{
+  "alt": "Software Developer",
+  "url": Any<String>,
+}
+`;
+
+exports[`Index page Whether all the poster images of the post loaded or not 23`] = `
+{
+  "alt": "react structure",
+  "url": Any<String>,
+}
+`;

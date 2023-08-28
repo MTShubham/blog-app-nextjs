@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Posts from "@/components/posts"
 import { REVALIDATE_TIME } from "@/utils/globalConstants";
@@ -10,6 +11,7 @@ export default function Home({ posts }: any) {
       <div className='bg-slate-100'>
         <Posts posts={posts} />
       </div>
+      <Footer />
     </>
   )
 }
